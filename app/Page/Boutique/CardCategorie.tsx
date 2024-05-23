@@ -2,7 +2,7 @@
 import React from 'react'
 import { useRouter } from "next/navigation";
 
-function CardCategorie({ showModal, setShowModal }: any) {
+function CardCategorie() {
   const router = useRouter();
 
   const cat: any = localStorage.getItem("card");

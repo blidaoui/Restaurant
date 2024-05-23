@@ -5,11 +5,12 @@ import ProduitList from "./ProduitList";
 import { IoMdAdd } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import AjouterCategorie from "@/app/Page/product/AjouterCategorie/AjouterCategorie";
+import { string } from "yup";
 
 interface Category {
   id: string;
   title: string;
-  imageUrl: {  
+  imageUrl: {
     Default: {
       urlDefault: string;
     };
@@ -29,19 +30,33 @@ interface ProductListProps {
   onCategoriesUpdate: any;
 }
 
-const CategoriesList: React.FC<ProductListProps> = ({ product, setShowCatList, onCategoriesUpdate }) => {
+const CategoriesList: React.FC<ProductListProps> = ({
+  product,
+  setShowCatList,
+  onCategoriesUpdate,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [update, setUpdate] = useState<boolean>(false);
   const [categories, setCategories] = useState<Record<string, Category>>({});
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
+    null
+  );
   const [showItemListe, setShowItemListe] = useState(false);
 
-  const productId = localStorage.getItem("productId") ? parseInt(localStorage.getItem("productId") as string, 10) : null;
-  const deleteCategory = async ( productId:number ,categoryId: string): Promise<void> => {
+  const productId = localStorage.getItem("productId")
+    ? parseInt(localStorage.getItem("productId") as string, 10)
+    : null;
+  const deleteCategory = async (
+    productId: number,
+    categoryId: string
+  ): Promise<void> => {
     try {
-      const response = await fetch(`http://localhost:8000/backend/restaurant/${productId}/${categoryId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:8000/backend/restaurant/${productId}/${categoryId}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to delete category");
@@ -62,7 +77,9 @@ const CategoriesList: React.FC<ProductListProps> = ({ product, setShowCatList, o
   };
 
   const handleDelete = async (categoryId: string) => {
-    const productId =localStorage.getItem("productId") ? parseInt(localStorage.getItem("productId") as string, 10) : null;
+    const productId = localStorage.getItem("productId")
+      ? parseInt(localStorage.getItem("productId") as string, 10)
+      : null;
 
     if (!productId) {
       alert("No product found");
@@ -74,10 +91,13 @@ const CategoriesList: React.FC<ProductListProps> = ({ product, setShowCatList, o
 
   const getCategorie = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/backend/restaurant/${productId}/categories`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await fetch(
+        `http://localhost:8000/backend/restaurant/${productId}/categories`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       if (response.ok) {
         const data = await response.json();
         setCategories(data);
@@ -108,22 +128,23 @@ const CategoriesList: React.FC<ProductListProps> = ({ product, setShowCatList, o
   const handleShowProducts = (categoryId: string) => {
     setSelectedCategoryId(categoryId);
     setShowItemListe(true);
-    localStorage.setItem("categorieID", (categoryId));
-
+    localStorage.setItem("categorieID", categoryId);
+    // localStorage.setItem("categorieName", card.categories[categoryId].title);
 
   };
-
+  const companyname = localStorage.getItem("companyname");
   return (
     <div>
       {!showItemListe ? (
         <div>
           <h2>Liste des Categories</h2>
-          <Button onClick={handleAddCategory} style={{float:"right"}}>
-              <IoMdAdd /> 
-            </Button>
+          <Button onClick={handleAddCategory} style={{ float: "right" }}>
+            <IoMdAdd />
+          </Button>
           <table className="table">
             <thead>
               <tr>
+                <th>Restaurant</th>
                 <th>Titre</th>
                 <th>Image</th>
                 <th>Supprimer</th>
@@ -133,6 +154,9 @@ const CategoriesList: React.FC<ProductListProps> = ({ product, setShowCatList, o
             <tbody>
               {Object.keys(categories).map((categoryId, index) => (
                 <tr key={index}>
+                  <td>
+                    <h5>{companyname}</h5>
+                  </td>
                   <td>
                     <h5>{categories[categoryId].title}</h5>
                   </td>
@@ -144,29 +168,35 @@ const CategoriesList: React.FC<ProductListProps> = ({ product, setShowCatList, o
                     />
                   </td>
                   <td>
-                    <Button onClick={() => handleDelete(categoryId)}><MdDelete /></Button>
+                    <Button onClick={() => handleDelete(categoryId)}>
+                      <MdDelete />
+                    </Button>
                   </td>
                   <td>
-                    <Button onClick={() => handleShowProducts(categoryId)}>produits</Button>
+                    <Button onClick={() => handleShowProducts(categoryId)}>
+                      produits
+                    </Button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
 
-          
           <Button onClick={() => setShowCatList(false)}>Retour</Button>
           {showModal && (
             <AjouterCategorie
               showModal={showModal}
               setShowModal={handleCloseModal}
               setUpdate={setUpdate}
-              update={update} 
+              update={update}
             />
           )}
         </div>
       ) : (
-        <ProduitList categoryId={selectedCategoryId} setShowItemListe={setShowItemListe} />
+        <ProduitList
+          categoryId={selectedCategoryId}
+          setShowItemListe={setShowItemListe}
+        />
       )}
     </div>
   );

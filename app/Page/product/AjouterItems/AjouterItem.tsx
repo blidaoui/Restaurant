@@ -4,17 +4,35 @@ import React, { SyntheticEvent, useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 
-type AddItemProps = {
+type AjouterItemProps = {
   showModal: boolean;
   setShowModal: (show: boolean) => void;
   setUpdate: (update: boolean) => void;
   update: boolean;
 };
 
-const AddItem: React.FC<AddItemProps> = ({ showModal, setShowModal, setUpdate, update }) => {
+type Composition = {
+  id: string;
+  title: string;
+};
+
+const AjouterItem: React.FC<AjouterItemProps> = ({ showModal, setShowModal, setUpdate, update }) => {
   const [image, setImage] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [price, setPrice] = useState<string>("");
+  const [compositions, setCompositions] = useState<Composition[]>([]);
+
+  const handleAddComposition = () => {
+    const newComposition = {
+      id: uuidv4(),
+      title: "",
+    };
+    setCompositions([...compositions, newComposition]);
+  };
+
+  const handleCompositionChange = (id: string, newTitle: string) => {
+    setCompositions(compositions.map(comp => (comp.id === id ? { ...comp, title: newTitle } : comp)));
+  };
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
@@ -31,35 +49,18 @@ const AddItem: React.FC<AddItemProps> = ({ showModal, setShowModal, setUpdate, u
       id: [id],
       color: "#FFFFFF",
       price: {
-        tva: 1,
-        default: 0,
         priceHT: price,
-        override: [],
       },
-      ranks: {
-        default: 1,
-        orderOverride: [
-          {
-            Order: 1,
-            IdShop: 2,
-          },
-        ],
-      },
-      steps: ["c2b3cf59-36dd-4a7d-a662-dc29a2bd233a"],
       title: title,
-      unity: "",
-      prSize: "0",
-      archive: false,
-      barCode: "",
-      options: {},
-      calories: 0,
-      fidelity: 0,
       imageUrl: {
         Default: {
           urlDefault: image,
-          salesSupport: [],
         },
       },
+      basicComposition: compositions.map(comp => ({
+        id: [comp.id],
+        title: comp.title,
+      })),
     };
 
     try {
@@ -89,7 +90,7 @@ const AddItem: React.FC<AddItemProps> = ({ showModal, setShowModal, setUpdate, u
   return (
     <Modal show={showModal} onHide={handleCloseModal}>
       <Modal.Header closeButton>
-        <Modal.Title className="text-center">Ajouter item</Modal.Title>
+        <Modal.Title className="text-center">Ajouter Produit</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
@@ -123,6 +124,22 @@ const AddItem: React.FC<AddItemProps> = ({ showModal, setShowModal, setUpdate, u
               required
             />
           </Form.Group>
+          <h3>Ajouter composition de base</h3>
+          {compositions.map((composition, index) => (
+            <Form.Group key={composition.id} className="mb-3">
+              <Form.Label>Composition de base {index + 1}</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Titre"
+                value={composition.title}
+                onChange={(e) => handleCompositionChange(composition.id, e.target.value)}
+                required
+              />
+            </Form.Group>
+          ))}
+          <Button variant="secondary" onClick={handleAddComposition} className="mb-3">
+            Ajouter une composition
+          </Button>
           <Button variant="primary" type="submit">
             Ajouter
           </Button>
@@ -132,4 +149,4 @@ const AddItem: React.FC<AddItemProps> = ({ showModal, setShowModal, setUpdate, u
   );
 };
 
-export default AddItem;
+export default AjouterItem;

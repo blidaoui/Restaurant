@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { PiLockKeyThin } from "react-icons/pi";
 

@@ -47,6 +47,7 @@ function CardBoutique() {
           workflow: key?.card.workflow,
           categories: key?.card.categories,
           items: key?.card.items,
+          supplements: key?.card.supplements,
           id: key?.id,
         };
       }
@@ -104,11 +105,11 @@ function CardBoutique() {
                   <img src={item?.resto.image} className="box-img" alt="" />
                 </div>
                 <div className="detail-box">
-                  <h4> {item?.resto.Company}</h4>
+                  <h4> {item?.resto.company}</h4>
                   <p>
                     {" "}
                     <HiMiniMapPin />
-                    {item?.resto.Address}, {item?.resto.PostalCode}{" "}
+                    {item?.resto.address}, {item?.resto.postalCode}{" "}
                     {item?.resto.town}
                   </p>
                 </div>

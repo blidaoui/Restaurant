@@ -15,18 +15,15 @@ const ModalCategorie: any = ({ showModal, setShowModal }: any) => {
   const toggle = () => setShowModal(!showModal);
   const router = useRouter();
   const panierSnapshot = useSnapshot(store);
-  const [clicked, setClicked] = useState(false);
 
   const userId = localStorage.getItem("userId");
-  let etat = "payé";
+  // let etat = "payé";
 
   const { selectedCategorie } = useSnapshot(store);
   console.log({ selectedCategorie });
   const [chosenOption, setChosenOption] = useState<string>("");
   const [selectedTime, setSelectedTime] = useState<string>("");
-  const [currentDate, setCurrentDate] = useState(
-    new Date().toISOString().slice(0, 10)
-  ); // Récupère la date d'aujourd'hui
+  const [deliveryAddress, setDeliveryAddress] = useState<string>("");
 
   const handleOptionClick = (option: string) => {
     setChosenOption(option);
@@ -35,14 +32,11 @@ const ModalCategorie: any = ({ showModal, setShowModal }: any) => {
   const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedTime(event.target.value);
   };
+  const handleAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDeliveryAddress(event.target.value);
+  };
 
-  const handleValidateClick = async ({
-    cartItem,
-    id_user,
-    etat,
-    prix,
-    ModeRetrait,
-  }: any) => {
+  const handleValidateClick = async ({ cartItem, id_user, etat, prix, ModeRetrait }: any) => {
     const Panier = panierSnapshot.Panier;
     let DataCartItem: any = [];
     let TPrix: any = 0;
@@ -60,6 +54,7 @@ const ModalCategorie: any = ({ showModal, setShowModal }: any) => {
         Mode: chosenOption,
         time: selectedTime,
       },
+      address: deliveryAddress,
     };
     let response = await fetch(
       "http://localhost:8000/backend/panier/AddPanier",
@@ -70,23 +65,22 @@ const ModalCategorie: any = ({ showModal, setShowModal }: any) => {
       }
     );
 
+  
     if (selectedTime === "") {
       alert("insert time");
     } else if (chosenOption === "emporter") {
       router.push("/Page/Profile/Commande");
-    } else if (chosenOption === "livraison") {
-      alert("choose sale mode");
+    } else if (chosenOption === "livraison" && deliveryAddress === "") {
+      alert("insert address");
+    } else {
+      router.push("/Page/Profile/Commande");
     }
     toggle();
   };
 
-  // const handleCloseClick = () => {
-  //   setModal(false);
-  // };
+  
   useEffect(() => {
-    const currentTime = new Date().toLocaleTimeString("en-US", {
-      hour12: false,
-    });
+    const currentTime = new Date().toLocaleTimeString('en-US', { hour12: false });
     setSelectedTime(currentTime);
   }, []); // Utilisation de useEffect pour exécuter une fois après le rendu initial
 
@@ -145,6 +139,18 @@ const ModalCategorie: any = ({ showModal, setShowModal }: any) => {
             min={new Date().toLocaleTimeString("en-US", { hour12: false })}
           />
         </div>
+        {chosenOption === "livraison" && (
+          <div className="address-input">
+            <label htmlFor="deliveryAddress">Adresse de livraison:</label>
+            <input
+              type="text"
+              id="deliveryAddress"
+              value={deliveryAddress}
+              onChange={handleAddressChange}
+              placeholder="Entrez votre adresse"
+            />
+          </div>
+        )}
         <Cartes />
       </Modal.Body>
       <Modal.Footer className="footer">

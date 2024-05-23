@@ -37,6 +37,8 @@ const ProductList: React.FC<ProductListProps> = (props) => {
     localStorage.setItem("card", JSON.stringify({ categories: resto.card.categories }));
     localStorage.setItem("categories", JSON.stringify({ categories: resto.card.categories }));
     localStorage.setItem("idResto", JSON.stringify(resto.resto.shopid));
+    localStorage.setItem("companyname", JSON.stringify(resto.resto.company)); // Set productId to localStorage
+
     localStorage.setItem("productId", JSON.stringify(resto.id));
     setShowCatList(true);
   };
@@ -100,7 +102,6 @@ const ProductList: React.FC<ProductListProps> = (props) => {
             <thead>
               <tr>
                 <th>Company</th>
-                <th>Shop ID</th>
                 <th>Modifier</th>
                 <th>Supprimer</th>
                 <th>liste</th>
@@ -109,8 +110,8 @@ const ProductList: React.FC<ProductListProps> = (props) => {
             <tbody>
               {product.map((value: any) => (
                 <tr key={value.id}>
-                  <td>{value.resto.Company}</td>
-                  <td>{value.resto.shopid}</td>
+                  <td>{value.resto.company}</td>
+                  {/* <td>{value.resto.shopid}</td> */}
                   <td>
                     <Button onClick={() => handleClickUpdate(value)}>
                       <GrUpdate />

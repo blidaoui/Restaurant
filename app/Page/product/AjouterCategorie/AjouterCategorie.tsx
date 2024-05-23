@@ -3,16 +3,16 @@ import React, { SyntheticEvent, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { v4 } from 'uuid';
 
-import { addCategories } from "./Add";
+import { AjouterCategories } from "./Ajouter";
 
-type AddCategorieType = {
+type AjouterCategorieType = {
   showModal: boolean,
   setShowModal: Function,
   setUpdate: Function,
   update: boolean
 }
 
-export default function AjouterCategorie({ showModal, setShowModal, setUpdate, update }: AddCategorieType) {
+export default function AjouterCategorie({ showModal, setShowModal, setUpdate, update }: AjouterCategorieType) {
   const [image, setImage] = useState("");
   const [title, setTitle] = useState("");
 
@@ -33,7 +33,7 @@ export default function AjouterCategorie({ showModal, setShowModal, setUpdate, u
     }
 
     let id = v4();
-    let NewCategories = addCategories(id, title, image, IndexCard);
+    let NewCategories = AjouterCategories(id, title, image, IndexCard);
     const productId=localStorage.getItem("productId")
     await fetch(`http://localhost:8000/backend/restaurant/${productId}`, {
       method: "POST",

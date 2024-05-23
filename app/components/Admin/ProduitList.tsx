@@ -1,5 +1,5 @@
 "use client";
-import AddItem from "@/app/Page/product/addItems/AddItem";
+import AjouterItem from "@/app/Page/product/AjouterItems/AjouterItem";
 import EditItem from "@/app/Page/product/updateItem/EditItem";
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
@@ -167,7 +167,7 @@ const ProduitList: React.FC<ProduitListProps> = ({
       </Button>
       <Button onClick={handleAddItem}>Ajouter produit</Button>
       {showModal && !editItemId && (
-        <AddItem
+        <AjouterItem
           showModal={showModal}
           setShowModal={handleCloseModal}
           setUpdate={setUpdate}
