@@ -261,6 +261,19 @@ export class ProductController {
 
     return { item, details: product.card.items[itemId] };
   }
+  @Get(':id/products')
+  async getItems(
+    @Param('id') id: number,
+  
+  ): Promise<Product[]> {
+    const resto: any = await this.ProductService.findOneResto({
+      where: { id },
+    });
+    if (!resto) {
+      throw new Error('Restaurant not found');
+    }
+    return resto.card.items;
+  }
   /// put items
   @Put('updateItem/:id/:idCategorie/:itemId')
   async updateItem(

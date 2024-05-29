@@ -16,9 +16,7 @@ export default function RootLayout({children}:any) {
     <html lang="en">
       <body className={inter.className}>
       <UserLocationProvider>
-    
-      
-        <main className="Container">{children}</main>
+       <main className="Container">{children}</main>
       <link rel="stylesheet" href="https://rsms.me/inter/inter.css"/>
       <link href="./output.css" rel="stylesheet"/>
 

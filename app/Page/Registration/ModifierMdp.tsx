@@ -9,6 +9,7 @@ import { TbCircleNumber1} from "react-icons/tb";
 import { TiTick } from "react-icons/ti";
 import Button from "@/app/components/Form/Button";
 import Input from "@/app/components/Form/Input";
+import React from "react";
 
 interface ModifierMdpProps {
     isLoading: boolean;
@@ -17,6 +18,8 @@ interface ModifierMdpProps {
     setEmail:Function
     setPassword:Function
     setIsMotdepasseoublié:Function
+    telephone:string
+    setCanReturn:Function
     }
     
 const ModifierMdp:React.FC<ModifierMdpProps>= ({
@@ -25,7 +28,8 @@ const ModifierMdp:React.FC<ModifierMdpProps>= ({
     email,
     setEmail,
     setPassword,
-    setIsMotdepasseoublié
+    setIsMotdepasseoublié,
+    telephone,setCanReturn
     }) => {
 
     const {
@@ -68,9 +72,10 @@ const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     data.email = email
     console.log({email});
     setIsLoading(true);
-    const { password1, ...result } = data;
+    let { password1, ...result } = data;
+    result={...result,tele:telephone}
     console.log({data})
-    const res = await fetch("http://localhost:8000/backend/user/password/1", {
+    const res = await fetch("http://localhost:8000/backend/user/password/phone", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(result),
@@ -85,7 +90,9 @@ const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         setIsMotdepasseoublié(false)
     }
     };
-    
+    React.useEffect(()=>{
+        setCanReturn(false)
+    },[])
 
 return (
 <div>

@@ -1,8 +1,8 @@
-"use client"
+"use client";
 import React, { SyntheticEvent, useState } from "react";
 import { toast } from "react-toastify";
 
-const Registration = () => {
+const Registration = ({setCanReturn}:any) => {
   const [nom, setNom] = useState("");
   const [prenom, setPrenom] = useState("");
   const [tele, setTele] = useState("");
@@ -14,20 +14,23 @@ const Registration = () => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
   };
-  const validatePhoneNumber = (phoneNumber: any) => {
+
+  const validatePhoneNumber = (phoneNumber: string) => {
     const re = /^\d{8}$/;
     return re.test(phoneNumber);
   };
- 
+
   const listOfUser = async () => {
     const response = await fetch("http://localhost:8000/backend/user");
-    const data: any = await response.json();
+    const data = await response.json();
     return data;
   };
+
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     let users = await listOfUser();
-    console.log({users});
+    console.log({ users });
+
     if (!validateEmail(email)) {
       toast.error(`Veuillez saisir une adresse e-mail valide!`, {
         autoClose: 2000,
@@ -38,14 +41,16 @@ const Registration = () => {
       });
       return;
     }
+
     if (password !== confirmPassword) {
       toast.error(`Les mots de passe ne correspondent pas!`, {
         autoClose: 2000,
       });
       return;
     }
-     if (!validatePhoneNumber(tele)) {
-      toast.error(`Veuillez saisir un numéro de téléphone valide (9 chiffres)!`, {
+
+    if (!validatePhoneNumber(tele)) {
+      toast.error(`Veuillez saisir un numéro de téléphone valide (8 chiffres)!`, {
         autoClose: 2000,
         theme: "colored",
         closeOnClick: true,
@@ -54,34 +59,46 @@ const Registration = () => {
       });
       return;
     }
-    
-    if (users.find((el: any) => el.email === email) !== undefined) {
-      toast.error(`email used!`, {
-        // position: toast.POSITION.TOP_CENTER,
-        autoClose: 2000,
-        theme: "colored",
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
-    } else {
-      toast.success(`compte crée avec succes`, {
-        // position: toast.POSITION.TOP_CENTER,
-        autoClose: 2000,
-        theme: "colored",
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      
-      });
-      await fetch("http://localhost:8000/backend/user/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nom, prenom, tele, email, password }),
-      });
-    }
-  };
 
+    if (users.find((el: any) => el.email === email) !== undefined) {
+      toast.error(`L'adresse e-mail est déjà utilisée!`, {
+        autoClose: 2000,
+        theme: "colored",
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      return;
+    }
+
+    if (users.find((el: any) => (el.tele).toString() === tele.toString()) !== undefined) {
+      toast.error(`Le numéro de téléphone est déjà utilisé!`, {
+        autoClose: 2000,
+        theme: "colored",
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      return;
+    }
+
+    toast.success(`Compte créé avec succès`, {
+      autoClose: 2000,
+      theme: "colored",
+      closeOnClick: true, 
+      pauseOnHover: true,
+      draggable: true,
+    });
+
+    await fetch("http://localhost:8000/backend/user/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nom, prenom, tele, email, password }),
+    });
+  };
+  React.useEffect(()=>{
+    setCanReturn(true)
+},[])
   return (
     <div>
       <form className="form_main" action="">
@@ -96,7 +113,6 @@ const Registration = () => {
             onChange={(e) => setNom(e.target.value)}
           />
         </div>
-
         <div className="inputContainer">
           <input
             placeholder="Saisissez votre prénom"
@@ -107,14 +123,13 @@ const Registration = () => {
             onChange={(e) => setPrenom(e.target.value)}
           />
         </div>
-
         <div className="inputContainer">
           <input
             placeholder="Téléphone"
             id="Téléphone"
             value={tele}
             className="inputField"
-            type="integer"
+            type="text"
             required
             onChange={(e) => setTele(e.target.value)}
           />
@@ -154,7 +169,6 @@ const Registration = () => {
           Créer un compte
         </button>
       </form>
-
     </div>
   );
 };

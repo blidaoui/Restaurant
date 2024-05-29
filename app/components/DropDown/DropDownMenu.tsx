@@ -2,16 +2,21 @@
 import Login from '@/app/Page/Registration/Login';
 import React, { useState } from 'react';
 import { CgProfile } from "react-icons/cg";
+import { GoArrowLeft } from "react-icons/go";
 
 
 function DropDownMenu(): React.JSX.Element {
   const [showRegistration, setShowRegistration] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [canReturn, setCanReturn] = useState(false);
+  const [isMotdepasseoublié, setIsMotdepasseoublié] = useState<boolean>(false);
 
   const closeOffcanvas = () => {
-    setShowRegistration(false);
+    setIsMotdepasseoublié(false);
     setShowProfile(false);
+    setShowRegistration(false);
   };
+ 
 
   return (
     <nav className="navbar  mb-5 pb-5 ">
@@ -34,6 +39,11 @@ function DropDownMenu(): React.JSX.Element {
           aria-labelledby="offcanvasNavbarLabel"
         >
           <div className="offcanvas-header">
+        { canReturn? <button
+              type="button"
+              onClick={closeOffcanvas}
+            ><GoArrowLeft />
+            </button>:null}
             <h5 className="offcanvas-title" id="offcanvasNavbarLabel"></h5>
             <button
               type="button"
@@ -49,6 +59,10 @@ function DropDownMenu(): React.JSX.Element {
               setShowProfile={setShowProfile}
               showRegistration={showRegistration}
               setShowRegistration={setShowRegistration}
+              setCanReturn={setCanReturn}
+              setIsMotdepasseoublié={setIsMotdepasseoublié}
+              isMotdepasseoublié={isMotdepasseoublié}
+
             />
           </div>
         </div>

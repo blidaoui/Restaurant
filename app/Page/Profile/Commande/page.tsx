@@ -3,20 +3,6 @@ import React, { useEffect, useState } from "react";
 import Hero2 from "@/app/components/Hero2/Hero2";
 import './style.css'; // Assurez-vous de créer ce fichier CSS pour les styles personnalisés
 
-const CommandeAnnulee = () => (
-  <div className="invisiblemobile">
-    <h5>
-      <strong>Commande Annulée</strong>
-    </h5>
-  </div>
-);
-
-const NomBoutique = () => (
-  <div className="col-xl-7 col-md-6 col-10 d-flex align-items-center my-1">
-    PIZZA TIME GUYANCOURT
-  </div>
-);
-
 interface Commande {
   id: number;
   etat: string;
@@ -42,7 +28,7 @@ const CommandeItem = ({ commandeItem }: { commandeItem: Commande }) => (
       <CommandeRow label="État de commande" value={commandeItem.etat_Commande} />
       <CommandeRow label="Date de retrait" value={commandeItem.ModeRetrait.time} />
       <CommandeRow label="État du paiement" value={commandeItem.etat} />
-      <CommandeRow label="Montant" value={`${commandeItem.prix } € ` }/>
+      <CommandeRow label="Montant" value={`${commandeItem.prix} €`} />
     </div>
     <div className="invoice-footer">
       <div>Date de commande: {new Date(commandeItem.createdAt).toLocaleDateString()}</div>

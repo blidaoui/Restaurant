@@ -159,31 +159,6 @@ const Page = () => {
               </div>
           </div>
           </div>
-          <div className=" relative justify-content border-[1.2px] border-slate-400 bg-white  shadow-md  rounded-xl ml-4 mr-4 mt-1">
-          <div className="flex p-2 justify-between ">
-              <div className="flex gap-1">
-              <p className="">Cart de fidélité</p>
-              </div>
-              <div>cc</div>
-          </div>
-          </div>
-          <div className=" relative justify-content border-[1.2px] border-slate-400 bg-white  shadow-md  rounded-xl ml-4 mr-4 mt-1">
-          <div className="flex p-2 justify-between ">
-              <div className="flex gap-1">
-              <p className="">Code Promo</p>
-              </div>
-              <div>ccc</div>
-          </div>
-          </div>
-          <div className=" relative justify-content border-[1.2px] border-slate-400 bg-white  shadow-md  rounded-xl ml-4 mr-4 mt-1">
-          <div className="flex p-2 justify-between ">
-              <div className="flex gap-1">
-              <p className="">Reste a payer</p>
-              </div>
-              <div>
-              </div>
-          </div>
-          </div>
           <div className=" relative justify-content border-[1.2px] border-slate-400 bg-gray-700  text-white shadow-md  rounded-t-xl ml-4 mr-4 mt-4 ">
           <div className="grid flex-row p-2 justify-between ">
               <div className="flex gap-1 ">

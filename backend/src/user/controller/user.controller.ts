@@ -44,6 +44,7 @@ export class UserController {
       tele,
       email,
       password: hashedPassword,
+      createdAt: new Date(),
     });
   }
   @Post('login')
@@ -80,7 +81,7 @@ export class UserController {
       throw new Error('User not found');
     } else {
       // const cookie = request.cookies['jwt'];
-      // const data = await this.jwtService.verifyAsync(cookie);
+      // // const data = await this.jwtService.verifyAsync(cookie);
       // if(!data){
       //     throw new BadRequestException('invalid credentials')
       // }
@@ -104,6 +105,21 @@ export class UserController {
   ) {
       // Handle the case when the user is found
       const user = await this.userService.findOne({ where: { email } });
+      if (!user) {
+          throw new Error('User not found');
+      }
+      
+      const hashedPassword = await bcrypt.hash(password, 12);
+      await this.userService.updateUserPassword(user.user_id, hashedPassword);
+      return { message: 'success' };
+  }
+  @Put('/password/phone')
+  async updatePasswordByPhoneNumber(
+      @Body('tele') tele: string,
+      @Body('password') password: string,
+  ) {
+      // Handle the case when the user is found
+      const user = await this.userService.findOne({ where: { tele } });
       if (!user) {
           throw new Error('User not found');
       }
@@ -154,18 +170,32 @@ export class UserController {
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(@Req() req  ,@Res({passthrough: true}) response :Response){
       try {
-          const rep: any = await this.userService.googleLogin(req);
-          // Set the JWT token in cookies
-          response.cookie('jwt', rep.user);
-          return response.redirect(`http://localhost:3000/`);
+        const { user } = req;
+        if (!user) {
+            throw new BadRequestException('Google authentication failed');
+        }
 
-          //return { message: 'success',token:rep.user.accessToken };
-      } catch (error) {
-          // Handle error
+        // Check if the user already exists
+        let existingUser = await this.userService.findOne({ where: { email: user.email } });
+        if (!existingUser) {
+        
+        // Register new user
+                 existingUser = await this.userService.create({
+                  nom: user.firstName,
+                  prenom:user.lastName,
+                  email:user.email,
+                  createdAt: new Date(),
+              });
+          }
+
+          // Generate JWT token
+          const jwt = await this.jwtService.signAsync({ user_id: existingUser.user_id });
+          response.cookie('jwt', jwt);
+          return response.redirect('http://localhost:3000/');
+        } catch (error) {
           console.error(error);
-          // You might want to redirect to an error page or return an error response
           response.status(500).json({ error: 'Internal Server Error' });
-      }
+        }
   }
 
   @Post('send-email/1')

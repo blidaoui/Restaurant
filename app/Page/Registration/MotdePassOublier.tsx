@@ -13,6 +13,7 @@ import Button from "@/app/components/Form/Button";
 import ModifierMdp from "./ModifierMdp";
 
 import "./style.css";
+import React from "react";
 
 interface MotdepasseoubliéProps {
 isLoading: boolean;
@@ -21,6 +22,7 @@ setemail: (val: string) => void;
 handleSignUpClick: () => void;
 setPassword: (val: string) => void;
 setIsMotdepasseoublié:Function;
+setCanReturn:Function
 }
 
 const Motdepasseoublié: React.FC<MotdepasseoubliéProps> = ({
@@ -30,6 +32,7 @@ handleSignUpClick,
 setPassword,
 setemail,
 setIsMotdepasseoublié,
+setCanReturn
 }) => {
     const {
         register,
@@ -60,6 +63,7 @@ const [code, setCode] = useState("");
 const [Email, setEmail] = useState("");
 const [isPassword, setIsPassword] = useState("");
 const [sms, setSms] = useState(false);
+const [telephone, setTelephone] = useState("");
 
 
 const [jsonData, setjsonData] = useState<any>(null);
@@ -91,6 +95,7 @@ const onSubmitSMS: SubmitHandler<FieldValues> = async (data) => {
     // pass = data.password;
     // setIsPassword(pass);
     // setPassword(isPassword);
+    setTelephone(data.télephone)
     const code = genererCode();
     setCode(code);
     setIsLoading(true);
@@ -143,7 +148,9 @@ if (jsonData.message === "Email envoyé avec succès") {
     setCodeEnvoyé(true);
 }
 };
-
+React.useEffect(()=>{
+    setCanReturn(true)
+},[])
 return (
 <>
     <div className="flex gap-2 p-4 items-center justify-center">
@@ -304,7 +311,9 @@ return (
         email={Email}
         setEmail={setEmail}
         setPassword={setPassword}
+        telephone={telephone}
         setIsMotdepasseoublié={setIsMotdepasseoublié}
+        setCanReturn={setCanReturn}
     />
     )}
 </>
