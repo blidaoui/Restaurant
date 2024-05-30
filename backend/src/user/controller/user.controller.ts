@@ -81,7 +81,7 @@ export class UserController {
       throw new Error('User not found');
     } else {
       // const cookie = request.cookies['jwt'];
-      // // const data = await this.jwtService.verifyAsync(cookie);
+      // const data = await this.jwtService.verifyAsync(cookie);
       // if(!data){
       //     throw new BadRequestException('invalid credentials')
       // }
@@ -190,8 +190,12 @@ export class UserController {
 
           // Generate JWT token
           const jwt = await this.jwtService.signAsync({ user_id: existingUser.user_id });
-          response.cookie('jwt', jwt);
+          response.cookie('userId', existingUser.user_id );
+          
           return response.redirect('http://localhost:3000/');
+        //  console.log({response});
+         
+        //    return {user_id: existingUser.user_id}
         } catch (error) {
           console.error(error);
           response.status(500).json({ error: 'Internal Server Error' });

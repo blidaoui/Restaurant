@@ -58,7 +58,7 @@ export class PanierController {
   @Get()
   async getPanier(): Promise<Panier[]> {
     return await this.panierServices.findPanier({
-      where: { etat_Commande:"En attente"},
+      where: { etat_Commande:"En cour de préparation"},
     });
   }
 

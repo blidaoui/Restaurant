@@ -20,7 +20,7 @@ export class Panier{
     @Column({ type: 'jsonb', default:null })
     ModeRetrait:string;
 
-    @Column({default:"En attente"})
+    @Column({default:"En cour de préparation"})
     etat_Commande:string;
 
     @Column({type:'timestamp',default:()=>'CURRENT_TIMESTAMP'})
