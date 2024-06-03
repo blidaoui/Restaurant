@@ -9,7 +9,7 @@ import Address from "./Address";
 import Cartes from "./Cartes";
 import "./profile.css";
 import { CiMobile3 } from "react-icons/ci";
-import Container from "@/app/components/Container";
+import Container from "@/app/components/container";
 
 interface UserData {
   user_id: number;

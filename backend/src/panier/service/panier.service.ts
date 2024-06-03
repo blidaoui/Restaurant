@@ -30,13 +30,11 @@ export class PanierService {
         return this.panierRepository.update({id},{etat_Commande:etat_Commande});
 
     }
-    updatePanier(id_user:number):Promise<UpdateResult>{
-        return this.panierRepository.update({ id_user }, { etat: 'Payée' })
+    updatePanier(id_user:number,cartItem:any,prixTotal:any,etat:any,etat_Commande:any,createdAt:Date,ModeRetrait:any):Promise<UpdateResult>{
+        return this.panierRepository.update({ id_user }, {cartItem,prix:prixTotal,etat:etat,etat_Commande:etat_Commande,createdAt:createdAt,ModeRetrait:ModeRetrait})
     }
     createEtatCommande(id:number):Promise<Panier>{
         return this.panierRepository.save({id});
-
-
     }
     // async updateEtat(panier: Panier): Promise<UpdateResult> {
     //     const { id, etat_Commande } = panier; // Assuming you have these properties in your Panier entity
